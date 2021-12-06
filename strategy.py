@@ -154,7 +154,7 @@ while True:
         if longPozisyonda and df["timestamp"][len(df.index)-1] != longEnterZaman and ((float(df["low"][len(df.index)-1]) - float(position_bilgi["entryPrice"][len(position_bilgi.index) - 1])) / float(position_bilgi["entryPrice"][len(position_bilgi.index) - 1])) * 100 * -1 >= float(stopLoss):
             print ("STOP LOSS")
             satilacakMiktar = (float(position_bilgi["positionAmt"][len(position_bilgi.index) - 1]))
-            longExit()
+            longExit(satilacakMiktar)
             takeprofit1 = False
             takeprofit1 = False
             baslik = symbol
@@ -170,7 +170,7 @@ while True:
         if shortPozisyonda and df["timestamp"][len(df.index)-1] != longEnterZaman and ((float(df["low"][len(df.index)-1]) - float(position_bilgi["entryPrice"][len(position_bilgi.index) - 1])) / float(position_bilgi["entryPrice"][len(position_bilgi.index) - 1])) * 100 >= float(stopLoss):
             print ("STOP LOSS")
             satilacakMiktar = (float(position_bilgi["positionAmt"][len(position_bilgi.index) - 1]))
-            shortExit()
+            shortExit(satilacakMiktar)
             takeprofit1 = False
             takeprofit1 = False
             baslik = symbol
