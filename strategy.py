@@ -19,8 +19,6 @@ tp1 = input("TakeProfit 1 %: ")
 tp2 = input("TakeProfit 2 %: ")
 
 alinacak_miktar = 0
-longEnterZaman = 0
-shortEnterZaman = 0
 
 kesisim = False
 longPozisyonda = False
@@ -116,7 +114,6 @@ while True:
             alinacak_miktar = (((float(free_balance["USDT"]) / 100 ) * float(islemeGirecekPara)) * float(leverage)) / float(df["close"][len(df.index) - 1])
             print("LONG İŞLEME GİRİLİYOR...")
             longEnter(alinacak_miktar)
-            longEnterZaman = df["timestamp"][len(df.index)-1]
             takeprofit1 = False
             takeprofit1 = False
             baslik = symbol
@@ -138,7 +135,6 @@ while True:
             alinacak_miktar = (((float(free_balance["USDT"]) / 100 ) * float(islemeGirecekPara)) * float(leverage)) / float(df["close"][len(df.index) - 1])
             print ("SHORT İŞLEME GİRİLİYOR...")
             shortEnter(alinacak_miktar)
-            shortEnterZaman = df["timestamp"][len(df.index)-1]
             takeprofit1 = False
             takeprofit1 = False
             baslik = symbol
@@ -151,7 +147,7 @@ while True:
             mail.sendmail(config.mailAddress, config.sendTo, content.encode("utf-8"))
  
         # STOP LOSS FOR LONG POSITION
-        if longPozisyonda and df["timestamp"][len(df.index)-1] != longEnterZaman and ((float(df["low"][len(df.index)-1]) - float(position_bilgi["entryPrice"][len(position_bilgi.index) - 1])) / float(position_bilgi["entryPrice"][len(position_bilgi.index) - 1])) * 100 * -1 >= float(stopLoss):
+        if longPozisyonda and ((float(df["close"][len(df.index)-1]) - float(position_bilgi["entryPrice"][len(position_bilgi.index) - 1])) / float(position_bilgi["entryPrice"][len(position_bilgi.index) - 1])) * 100 * -1 >= float(stopLoss):
             print ("STOP LOSS")
             satilacakMiktar = (float(position_bilgi["positionAmt"][len(position_bilgi.index) - 1]))
             longExit(satilacakMiktar)
@@ -167,7 +163,7 @@ while True:
             mail.sendmail(config.mailAddress, config.sendTo, content.encode("utf-8")) 
         
         # STOP LOSS FOR SHORT POSITION
-        if shortPozisyonda and df["timestamp"][len(df.index)-1] != longEnterZaman and ((float(df["low"][len(df.index)-1]) - float(position_bilgi["entryPrice"][len(position_bilgi.index) - 1])) / float(position_bilgi["entryPrice"][len(position_bilgi.index) - 1])) * 100 >= float(stopLoss):
+        if shortPozisyonda and ((float(df["close"][len(df.index)-1]) - float(position_bilgi["entryPrice"][len(position_bilgi.index) - 1])) / float(position_bilgi["entryPrice"][len(position_bilgi.index) - 1])) * 100 >= float(stopLoss):
             print ("STOP LOSS")
             satilacakMiktar = (float(position_bilgi["positionAmt"][len(position_bilgi.index) - 1]))
             shortExit(satilacakMiktar)
@@ -184,7 +180,7 @@ while True:
         
         # TAKE PROFIT FOR LONG POSITION
         # TAKE PROFIT 1
-        if longPozisyonda and takeprofit1 == False and df["timestamp"][len(df.index)-1] != longEnterZaman and ((float(df["high"][len(df.index)-1]) - float(position_bilgi["entryPrice"][len(position_bilgi.index) - 1])) / float(position_bilgi["entryPrice"][len(position_bilgi.index) - 1])) * 100 >= float(tp1):
+        if longPozisyonda and takeprofit1 == False and ((float(df["close"][len(df.index)-1]) - float(position_bilgi["entryPrice"][len(position_bilgi.index) - 1])) / float(position_bilgi["entryPrice"][len(position_bilgi.index) - 1])) * 100 >= float(tp1):
             print ("TAKE PROFIT 1")
             satilacakMiktar = (float(position_bilgi["positionAmt"][len(position_bilgi.index) - 1])) / 2
             longExit(satilacakMiktar)
@@ -199,7 +195,7 @@ while True:
             mail.sendmail(config.mailAddress, config.sendTo, content.encode("utf-8"))
         
         # TAKE PROFIT 2
-        if longPozisyonda and takeprofit2 == False and  df["timestamp"][len(df.index)-1] != longEnterZaman and ((float(df["high"][len(df.index)-1]) - float(position_bilgi["entryPrice"][len(position_bilgi.index) - 1])) / float(position_bilgi["entryPrice"][len(position_bilgi.index) - 1])) * 100 >= float(tp2):
+        if longPozisyonda and takeprofit2 == False and ((float(df["close"][len(df.index)-1]) - float(position_bilgi["entryPrice"][len(position_bilgi.index) - 1])) / float(position_bilgi["entryPrice"][len(position_bilgi.index) - 1])) * 100 >= float(tp2):
             print ("TAKE PROFIT 2")
             satilacakMiktar = float(position_bilgi["positionAmt"][len(position_bilgi.index) - 1])
             longExit(satilacakMiktar)
@@ -215,7 +211,7 @@ while True:
         
         # TAKE PROFIT FOR SHORT POSITION
         # TAKE PROFIT 1
-        if shortPozisyonda and takeprofit1 == False and df["timestamp"][len(df.index)-1] != shortEnterZaman and ((float(df["low"][len(df.index)-1]) - float(position_bilgi["entryPrice"][len(position_bilgi.index) - 1])) / float(position_bilgi["entryPrice"][len(position_bilgi.index) - 1])) * 100 * -1 >= float(tp1):
+        if shortPozisyonda and takeprofit1 == False and ((float(df["close"][len(df.index)-1]) - float(position_bilgi["entryPrice"][len(position_bilgi.index) - 1])) / float(position_bilgi["entryPrice"][len(position_bilgi.index) - 1])) * 100 * -1 >= float(tp1):
             print ("TAKE PROFIT 1")
             satilacakMiktar = (float(position_bilgi["positionAmt"][len(position_bilgi.index) - 1])) / 2
             shortExit(satilacakMiktar)
@@ -230,7 +226,7 @@ while True:
             mail.sendmail(config.mailAddress, config.sendTo, content.encode("utf-8"))
         
         # TAKE PROFIT 2
-        if shortPozisyonda and takeprofit2 == False and df["timestamp"][len(df.index)-1] != shortEnterZaman and ((float(df["low"][len(df.index)-1]) - float(position_bilgi["entryPrice"][len(position_bilgi.index) - 1])) / float(position_bilgi["entryPrice"][len(position_bilgi.index) - 1])) * 100 * -1 >= float(tp2):
+        if shortPozisyonda and takeprofit2 == False and ((float(df["close"][len(df.index)-1]) - float(position_bilgi["entryPrice"][len(position_bilgi.index) - 1])) / float(position_bilgi["entryPrice"][len(position_bilgi.index) - 1])) * 100 * -1 >= float(tp2):
             print ("TAKE PROFIT 2")
             satilacakMiktar = float(position_bilgi["positionAmt"][len(position_bilgi.index) - 1])
             shortExit(satilacakMiktar)
